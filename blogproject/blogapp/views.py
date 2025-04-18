@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegisterForm 
-
+#test
 class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
