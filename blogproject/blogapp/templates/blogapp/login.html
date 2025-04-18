@@ -1,0 +1,30 @@
+{% extends 'blogapp/base.html' %}
+
+{% block content %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" style="color: red   ">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="POST" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Username</label>
+            <input type="text" name="username" class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <div class="form-group">
+            <label for="password" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Password</label>
+            <input type="password" name="password" class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+        <button type="submit" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Login</button>
+    </form>
+    <p style="color: white">Don't have an account? <a href="{% url 'blogapp:register' %}">Register here</a></p>
+
+</div>
+<style>
+
+</style>
+{% endblock %}

@@ -16,6 +16,11 @@
   </script>
   
   <style>
+  input
+  {
+    background-color: white;
+    color: black;
+  }
   html {
     background-color: white;
   }
@@ -44,12 +49,28 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
     transition: box-shadow 0.3s ease;
   }
+  form input {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+    form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+
 </style>
 </head>
 <body id="body" class="flex flex-col min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white font-sans transition-all duration-700 ease-in-out">
   <nav class="bg-white dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-700 shadow-md py-4 px-6 transition-colors">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
       <a href="{% url 'blogapp:blog_list' %}" class="text-gray-900 dark:text-white text-2xl font-semibold tracking-wider transition-colors">BlogSpace</a>
+      <a href="{% url 'blogapp:register' %}" class="text-gray-900 dark:text-white text-2xl font-semibold tracking-wider transition-colors">register</a>
+      <a href="{% url 'blogapp:login' %}" class="text-gray-900 dark:text-white text-2xl font-semibold tracking-wider transition-colors">login</a> 
+
       <div class="flex items-center space-x-4">
         <button onclick="toggleDarkMode()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 text-gray-900 dark:text-white hover:scale-105 transition-all duration-300 shadow-lg">
   <span id="theme-icon" class="transition-transform duration-500 transform">🌞</span>
@@ -57,6 +78,7 @@
 </button>
         {% if user.is_authenticated %}
           <a href="{% url 'blogapp:add_blog' %}" class="bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white font-medium py-2 px-4 rounded transition-all duration-500 ease-in-out">New Blog</a>
+          <a href="{% url 'blogapp:logout' %}" class="bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 dark:text-white font-medium py-2 px-4 rounded transition-all duration-500 ease-in-out">Logout</a>
         {% endif %}
       </div>
     </div>

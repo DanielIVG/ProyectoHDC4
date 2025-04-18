@@ -7,7 +7,7 @@
         <h2 class="text-xl font-semibold mb-2">
           <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
         </h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }}</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }} - Tag: {{ blog.tag }}</p>
       </div>
     {% empty %}
       <p class="text-gray-500 dark:text-gray-400 text-center">No blogs have been posted yet.</p>
