@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogapp',
     'widget_tweaks',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  BASE_DIR / 'media'
+
+#Configuracion de CKEditor
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 'auto',
+    },
+}

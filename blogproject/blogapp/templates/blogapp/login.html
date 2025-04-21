@@ -1,30 +1,45 @@
-{% extends 'blogapp/base.html' %}
+{% extends "blogapp/base.html" %}
+{% load static %}
 
 {% block content %}
-<div class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" style="color: red   ">
-                {{ message }}
-            </div>
-        {% endfor %}
+<div class="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 transition-all duration-700 ease-in-out">
+  <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md animate-fade-in">
+    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Iniciar Sesión</h2>
+
+    {% if form.errors %}
+      <div class="bg-red-100 dark:bg-red-200 text-red-800 px-4 py-3 rounded-md mb-4 text-sm font-medium shadow-sm">
+        ⚠️ Usuario o contraseña incorrectos.
+      </div>
     {% endif %}
-    <form method="POST" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Username</label>
-            <input type="text" name="username" class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <div class="form-group">
-            <label for="password" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Password</label>
-            <input type="password" name="password" class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-        </div>
-        <button type="submit" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Login</button>
+
+    <form method="post" class="space-y-6">
+      {% csrf_token %}
+
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuario</label>
+        <input type="text" name="username" id="username" required autofocus
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contraseña</label>
+        <input type="password" name="password" id="password" required
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+      </div>
+
+      <div class="text-sm text-center text-gray-600 dark:text-gray-400">
+        ¿No tienes una cuenta?
+        <a href="{% url 'blogapp:register' %}" class="text-blue-500 hover:underline">Regístrate aquí</a>
+      </div>
+
+      <div class="flex justify-between items-center pt-4">
+        <button type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 shadow-md">
+          Entrar
+        </button>
+        <a href="{% url 'blogapp:blog_list' %}" class="text-blue-500 hover:underline">Volver al inicio</a>
+      </div>
     </form>
-    <p style="color: white">Don't have an account? <a href="{% url 'blogapp:register' %}">Register here</a></p>
-
+  </div>
 </div>
-<style>
-
-</style>
 {% endblock %}
