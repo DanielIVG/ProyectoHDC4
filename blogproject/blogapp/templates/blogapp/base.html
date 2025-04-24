@@ -82,6 +82,8 @@
           {% else %}
             <a href="{% url 'blogapp:add_blog' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300">New Blog</a>
             <a href="{% url 'blogapp:logout' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300">Logout</a>
+            <a href="{% url 'blogapp:dashboard' %}" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300">Dashboard</a>
+
           {% endif %}
         {% endif %}
       </div>

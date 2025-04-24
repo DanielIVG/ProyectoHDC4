@@ -1,12 +1,12 @@
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView
 from django.urls import reverse_lazy
-from .models import Blog, Review, Comment
+from .models import Blog, Review, Comment, User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import RegisterForm, BlogForm
+from .forms import RegisterForm, BlogForm, UserProfileForm
 #test
 class BlogListView(ListView):
     model = Blog
@@ -75,6 +75,24 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('blogapp:blog_list')
+
+#dashboard
+class DashboardView(LoginRequiredMixin, TemplateView):
+    template_name = 'blogapp/dashboard.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blogs'] = Blog.objects.filter(author=self.request.user)
+        return context
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserProfileForm
+    template_name = 'blogapp/profile_edit.html'
+    success_url = reverse_lazy('blogapp:dashboard')
+    
+    def get_object(self):
+        return self.request.user
 
 class CommentCreateView(CreateView):
     model = Comment
