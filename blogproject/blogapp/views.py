@@ -7,7 +7,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import RegisterForm, BlogForm
-#test
+from .forms import RegisterForm
+
+
 class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
@@ -48,13 +50,13 @@ class ReviewCreateView(CreateView):
 #registrarse 
 def register_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('blogapp:blog_list')
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
 #login
