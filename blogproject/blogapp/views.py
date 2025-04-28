@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from .models import Blog, Review, Comment
+from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -88,3 +89,8 @@ class CommentCreateView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['blog_pk']})
+
+#cambiarPass
+class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'blogapp/change_password.html'
+    success_url = reverse_lazy ('blogapp:password_success') 
