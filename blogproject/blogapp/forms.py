@@ -45,6 +45,12 @@ class RegisterForm(UserCreationForm):
         }
     )
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email').lower().strip()
+        if User.objects.filter(email__iexact=email).exists():
+            raise ValidationError("Este correo electrónico ya está registrado.")
+        return email
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -68,7 +74,6 @@ class RegisterForm(UserCreationForm):
                     translated_errors.append(error)
             raise ValidationError(translated_errors)
         return password
-    
     
 
     def save(self, commit=True):
