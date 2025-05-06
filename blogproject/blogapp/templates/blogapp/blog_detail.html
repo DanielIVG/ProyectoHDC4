@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
   <article class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-lg transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
-    <h1 class="text-3xl font-bold mb-2">{{ object.title }}</h1>
-    <p class="text-gray-700 dark:text-gray-300 mb-4">{{ object.content }}</p>
+    <h1 class="text-3xl font-bold mb-4">{{ object.title }}</h1>
+
+    {% if object.image %}
+      <!-- Miniatura con efecto hover -->
+      <div class="overflow-hidden rounded-lg shadow-lg mb-6 max-w-4xl mx-auto cursor-pointer">
+        <img
+          src="{{ object.image.url }}"
+          alt="Imagen del blog"
+          class="w-full object-cover hover:scale-105 transition-transform duration-500 ease-in-out"
+          onclick="openLightbox('{{ object.image.url }}')"
+        >
+      </div>
+    {% endif %}
+
+    <div class="prose lg:prose-xl max-w-none dark:prose-invert prose-img:rounded-lg prose-img:shadow-md mb-6">
+      {{ object.content|safe }}
+    </div>
+
     <p class="text-sm text-gray-600 dark:text-gray-500">By {{ object.author.username }} - {{ object.created_at }}</p>
   </article>
 
-  <section class="mt-8">
+  <section class="mt-12">
     <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
     {% for review in object.reviews.all %}
       <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-4 transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
@@ -24,4 +40,58 @@
     {% endfor %}
     <a href="{% url 'blogapp:add_review' object.pk %}" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors">Add Review</a>
   </section>
+
+  <!-- Lightbox modal -->
+  <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 hidden z-50 flex items-center justify-center" onclick="closeLightbox()">
+    <img id="lightbox-image" src="" class="max-h-full max-w-full rounded-lg shadow-lg">
+  </div>
+
+  <script>
+    let lightboxImages = [];
+    let currentImageIndex = 0;
+  
+    function openLightbox(src) {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-image');
+  
+      currentImageIndex = lightboxImages.findIndex(i => i.src === src);
+      img.src = src;
+      lightbox.classList.remove('hidden');
+    }
+  
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.add('hidden');
+    }
+  
+    function showImage(index) {
+      if (index >= 0 && index < lightboxImages.length) {
+        currentImageIndex = index;
+        document.getElementById('lightbox-image').src = lightboxImages[index].src;
+      }
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      // Obtener todas las imágenes dentro del contenido enriquecido
+      lightboxImages = Array.from(document.querySelectorAll('.prose img'));
+  
+      lightboxImages.forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', () => openLightbox(img.src));
+      });
+  
+      // Navegación por teclado
+      document.addEventListener('keydown', e => {
+        const lightbox = document.getElementById('lightbox');
+        if (lightbox.classList.contains('hidden')) return;
+  
+        if (e.key === 'ArrowRight') {
+          showImage(currentImageIndex + 1);
+        } else if (e.key === 'ArrowLeft') {
+          showImage(currentImageIndex - 1);
+        } else if (e.key === 'Escape') {
+          closeLightbox();
+        }
+      });
+    });
+  </script>
 {% endblock %}

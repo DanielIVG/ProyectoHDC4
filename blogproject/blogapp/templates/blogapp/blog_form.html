@@ -1,19 +1,42 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+
 {% block content %}
-  <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Create a New Blog</h1>
-  <form method="post" class="space-y-4 transition-all duration-700 ease-in-out animate-fade-in">{% csrf_token %}
-    <div class="space-y-2 transition-all duration-700 ease-in-out">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 transition-all duration-700 ease-in-out animate-fade-in">
+    <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Crear Blog</h1>
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+      {% csrf_token %}
+      
       {% for field in form %}
-        <div>
-          <label for="{{ field.id_for_label }}" class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">{{ field.label }}</label>
-          {{ field|add_class:"bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-4 py-2 rounded-lg w-full border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" }}
+        <div class="space-y-2">
+          <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-900 dark:text-white">{{ field.label }}</label>
+
+          {% if field.name == "contenido" %}
+            {{ field|add_class:"ckeditor bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full min-h-[150px] max-h-[600px] border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-auto transition-all duration-300 ease-in-out" }}
+          {% else %}
+            {{ field|add_class:"bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out" }}
+          {% endif %}
+
           {% if field.errors %}
-            <p class="text-red-500 text-sm">{{ field.errors|striptags }}</p>
+            <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
           {% endif %}
         </div>
       {% endfor %}
-    </div>
-    <button type="submit" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white dark:bg-blue-600 dark:hover:bg-blue-700 rounded transition-all duration-500 ease-in-out">Post Blog</button>
-  </form>
+      
+      <div class="space-y-4">
+        <button type="submit" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all duration-500 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          Publicar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <style>
+    /* Opcional: para que CKEditor no se vea desalineado */
+    .cke_contents {
+      min-height: 150px !important;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+  </style>
 {% endblock %}
