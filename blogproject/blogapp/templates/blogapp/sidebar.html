@@ -1,0 +1,37 @@
+<!-- templates/components/profile_sidebar.html -->
+<div id="profile-sidebar" class="fixed top-0 right-0 z-40 h-screen w-64 overflow-y-auto transition-transform translate-x-full bg-gamer text-white dark:bg-gray-900 shadow-lg" tabindex="-1" aria-labelledby="profile-sidebar-label">
+    <div class="p-4 relative">
+      <h5 id="profile-sidebar-label" class="text-xl font-semibold text-neon mb-4">Mi Perfil</h5>
+      <button type="button" data-drawer-hide="profile-sidebar" aria-controls="profile-sidebar" class="text-gray-400 hover:text-white absolute top-2.5 right-2.5">
+        <svg aria-hidden="true" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+  
+      <!-- Contenido del perfil -->
+      <div class="flex flex-col items-center space-y-2 mt-8">
+        {% if user.profile.image %}
+            <img src="{{ user.profile.image.url }}" alt="Profile" class="w-24 h-24 rounded-full object-cover border-4 border-neon">
+        {% else %}
+            <img src="/static/images/DefaultProfilePic.jpg" alt="Profile" class="w-24 h-24 rounded-full object-cover border-4 border-neon">
+        {% endif %}
+
+
+        <p class="text-lg font-bold">{{ user.username }}</p>
+        <p class="text-sm text-gray-400">{{ user.email }}</p>
+  
+        <a href="{% url 'blogapp:dashboard' %}" class="mt-4 w-full text-center bg-neon text-black py-2 rounded-md hover:bg-white transition-all">
+          📝 Mis Blogs
+        </a>
+  
+        <a href="{% url 'blogapp:profile_edit' %}" class="w-full text-center bg-blue-500 text-white py-2 rounded-md hover:bg-blue-400 transition-all">
+          ✏️ Editar Perfil
+        </a>
+  
+        <a href="{% url 'blogapp:logout' %}" class="w-full text-center bg-red-500 py-2 rounded-md hover:bg-red-600 transition-all">
+          🔓 Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </div>
+  

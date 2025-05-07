@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GameVerse</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -118,7 +119,16 @@
             <a href="{% url 'blogapp:register' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-white transition-all duration-300">Register</a>
           {% else %}
             <a href="{% url 'blogapp:add_blog' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-white transition-all duration-300">Nuevo Blog</a>
-            <a href="{% url 'blogapp:logout' %}" class="bg-warning px-4 py-2 rounded-lg hover:bg-pink-600 transition-all duration-300">Logout</a>
+            <!-- Botón de imagen de perfil -->
+            <button data-drawer-target="profile-sidebar" data-drawer-show="profile-sidebar" data-drawer-placement="right" aria-controls="profile-sidebar">
+              {% if user.profile.image %}
+                  <img src="{{ user.profile.image.url }}" alt="Profile" class="w-10 h-10 rounded-full object-cover border-4 border-neon">
+              {% else %}
+                  <img src="/static/images/DefaultProfilePic.jpg" alt="Profile" class="w-10 h-10 rounded-full object-cover border-4 border-neon">
+              {% endif %}
+            </button>
+
+
           {% endif %}
         {% endif %}
       </div>
@@ -131,6 +141,7 @@
       {% block content %}{% endblock %}
     </div>
   </main>
+  {% include 'blogapp/sidebar.html' %}
 
   <!-- Footer estilo gamer -->
   <footer class="text-center py-6 bg-gray-800 text-gray-400">
