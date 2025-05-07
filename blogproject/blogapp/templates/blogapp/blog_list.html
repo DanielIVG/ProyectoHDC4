@@ -2,45 +2,45 @@
 
 {% block content %}
   <h1 class="text-4xl font-extrabold mb-6 text-center text-neon neon-glow">All Blogs</h1>
-  <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1"> <!-- Cambié la grilla para mostrar una tarjeta debajo de otra -->
+  <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
     {% for blog in object_list %}
-      <div class="bg-gradient-to-r from-gray-900 via-purple-800 to-blue-600 rounded-lg shadow-2xl p-6 hover:scale-105 hover:shadow-xl transition-all duration-500 ease-in-out dark:text-white text-gray-100 animate-fade-in">
-        
-        <!-- Imagen del blog (verifica si existe, si no, coloca una imagen por defecto) -->
-        <div class="w-full mb-4">
-          {% if blog.image %}
-            <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover rounded-lg shadow-md">
-          {% else %}
-            <img src="/static/images/DefaultBlogImage.jpeg" alt="Blog Image" class="w-full h-48 object-cover rounded-lg shadow-md">
-          {% endif %}
-        </div>
-
-        <!-- Título del blog -->
-        <h2 class="text-2xl font-bold mb-2 text-neon">
-          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="hover:text-neon">{{ blog.title }}</a>
-        </h2>
-
-        <!-- Detalles adicionales del blog -->
-        <p class="text-sm text-gray-400 mb-3">by <span class="font-semibold text-blue-300">{{ blog.author.username }}</span> | {{ blog.created_at|date:"M d, Y" }} | 
-          <span class="bg-neon text-black py-1 px-2 rounded-full text-xs">{{ blog.tag }}</span>
-        </p>
-
-        <!-- Pequeño resumen del blog -->
-        <p class="text-md text-gray-300 mb-4 line-clamp-3">{{ blog.description }}</p>
-
-        <!-- Ver más y botones de interacción -->
-        <div class="flex justify-between items-center">
-          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-neon font-semibold hover:underline">Read More</a>
-          <div class="flex items-center space-x-2">
-            <button class="text-neon hover:text-blue-400">
-              <i class="fas fa-heart"></i> Like
-            </button>
-            <button class="text-neon hover:text-red-400">
-              <i class="fas fa-share-alt"></i> Share
-            </button>
+      <!-- Toda la tarjeta ahora es un enlace -->
+      <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="block group">
+        <div class="bg-gradient-to-r from-gray-900 via-purple-800 to-blue-600 rounded-lg shadow-2xl p-6 group-hover:scale-105 group-hover:shadow-xl transition-all duration-500 ease-in-out dark:text-white text-gray-100 animate-fade-in cursor-pointer">
+          
+          <!-- Imagen -->
+          <div class="w-full mb-4">
+            {% if blog.image %}
+              <img src="{{ blog.image.url }}" alt="Blog Image" class="w-full h-48 object-cover rounded-lg shadow-md">
+            {% else %}
+              <img src="/static/images/DefaultBlogImage.jpeg" alt="Default Image" class="w-full h-48 object-cover rounded-lg shadow-md">
+            {% endif %}
           </div>
+
+          <!-- Título -->
+          <h2 class="text-2xl font-bold mb-2 text-neon group-hover:underline">{{ blog.title }}</h2>
+
+          <!-- Detalles -->
+          <p class="text-sm text-gray-400 mb-3">
+            by <span class="font-semibold text-blue-300">{{ blog.author.username }}</span> |
+            {{ blog.created_at|date:"M d, Y" }} |
+            <span class="bg-neon text-black py-1 px-2 rounded-full text-xs">{{ blog.tag }}</span>
+          </p>
+
+          <!-- Resumen -->
+          <p class="text-md text-gray-300 mb-4 line-clamp-3">{{ blog.description }}</p>
+
+          <!-- Botones visuales (no funcionales si toda la tarjeta es clickeable, pero pueden ser visuales) -->
+          <div class="flex justify-between items-center opacity-70 group-hover:opacity-100 transition-opacity duration-300">
+            <span class="text-neon font-semibold">Read More</span>
+            <div class="flex items-center space-x-2 text-neon">
+              <i class="fas fa-heart hover:text-blue-400"></i>
+              <i class="fas fa-share-alt hover:text-red-400"></i>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </a>
     {% empty %}
       <p class="text-gray-500 dark:text-gray-400 text-center">No blogs have been posted yet.</p>
     {% endfor %}
