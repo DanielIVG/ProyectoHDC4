@@ -2,41 +2,22 @@
 {% load widget_tweaks %}
 
 {% block content %}
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 transition-all duration-700 ease-in-out animate-fade-in">
-    <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Crear Blog</h1>
-    <form method="post" enctype="multipart/form-data" class="space-y-6">
-      {% csrf_token %}
-      
-      {% for field in form %}
-        <div class="space-y-2">
-          <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-900 dark:text-white">{{ field.label }}</label>
+<div class="...">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
 
-          {% if field.name == "contenido" %}
-            {{ field|add_class:"ckeditor bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full min-h-[150px] max-h-[600px] border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-auto transition-all duration-300 ease-in-out" }}
-          {% else %}
-            {{ field|add_class:"bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out" }}
-          {% endif %}
+    {% for field in form %}
+    <div class="mb-4">
+      <label class="block...">{{ field.label }}</label>
+      <!-- Cambia esta línea -->
+      {{ field|add_class:"your-classes" }}
+      {% if field.errors %}
+        <p class="text-red-500...">{{ field.errors }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
 
-          {% if field.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
-          {% endif %}
-        </div>
-      {% endfor %}
-      
-      <div class="space-y-4">
-        <button type="submit" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all duration-500 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-          Publicar
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <style>
-    /* Opcional: para que CKEditor no se vea desalineado */
-    .cke_contents {
-      min-height: 150px !important;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-  </style>
+    <button type="submit" class="...">Publicar</button>
+  </form>
+</div>
 {% endblock %}
