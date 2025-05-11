@@ -137,8 +137,7 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_CONFIGS = {
     'default': {
-        'disableNativeSpellChecker': False,
-        'toolbar': 'full',
+        'toolbar': 'Custom',
         'height': 300,
         'width': '100%',
     },
