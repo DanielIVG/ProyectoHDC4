@@ -84,16 +84,22 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['blogs'] = Blog.objects.filter(author=self.request.user)
+        context['section'] = 'blogs'
         return context
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserProfileForm
-    template_name = 'blogapp/profile_edit.html'
+    template_name = 'blogapp/dashboard.html'
     success_url = reverse_lazy('blogapp:dashboard')
     
     def get_object(self):
         return self.request.user
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['section'] = 'edit'
+        return context
 
 class CommentCreateView(CreateView):
     model = Comment

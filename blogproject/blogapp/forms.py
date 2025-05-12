@@ -1,13 +1,13 @@
 from django import forms
 from .models import Blog
-from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.fields import CKEditor5Field
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 
 class BlogForm(forms.ModelForm):
-    contenido = forms.CharField(widget=CKEditorWidget())
+    contenido = forms.CharField(widget=CKEditor5Field())
     class Meta:
         model = Blog
         fields = ['title', 'contenido', 'imagen']

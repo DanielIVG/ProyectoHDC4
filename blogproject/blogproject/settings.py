@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogapp',
     'widget_tweaks',
-    'ckeditor',
+    'django_ckeditor_5',
 ]
 
 MIDDLEWARE = [
@@ -133,10 +133,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT =  BASE_DIR / 'media'
 
 #Configuracion de CKEditor
-CKEDITOR_CONFIGS = {
+CKEDITOR_5_CONFIGS = {
     'default': {
-        'toolbar': 'full',
-        'height': 300,
-        'width': 'auto',
+        'toolbar': ['heading', '|', 'bold', 'italic', 'link'],
     },
 }

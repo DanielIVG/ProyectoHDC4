@@ -6,7 +6,7 @@ from django.core.validators import (
     FileExtensionValidator
 )
 from django.core.exceptions import ValidationError
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # ---- Validación personalizada para imágenes ----
 def validate_image_size(value):
@@ -22,7 +22,7 @@ class Blog(models.Model):
         max_length=255,
         help_text="Ingrese un título descriptivo (máx. 255 caracteres)"
     )
-    content = RichTextField(
+    content = CKEditor5Field(
         "Contenido",
         default='Escribe aquí tu contenido...'
     )
@@ -128,3 +128,10 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "Comentario"
         verbose_name_plural = "Comentarios"
+
+    class UserProfile(models.Model):
+        user = models.OneToOneField(User, on_delete=models.CASCADE)
+        image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+        def __str__(self):
+            return self.user.username
