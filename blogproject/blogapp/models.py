@@ -6,52 +6,77 @@ from django.core.validators import (
     FileExtensionValidator
 )
 from django.core.exceptions import ValidationError
-from django_ckeditor_5.fields import CKEditor5Field
+from ckeditor_uploader.fields import RichTextUploadingField
 
-# ---- Validación personalizada para imágenes ----
+
+class Tag(models.Model):
+    name = models.CharField(
+        "Nombre del Tag",
+        max_length=50,
+        unique=True,
+        help_text="Nombre único para la categorización"
+    )
+    color = models.CharField(
+        "Color del Tag",
+        max_length=7,
+        default="#3B82F6",
+        help_text="Color en formato HEX (ej: #3B82F6)"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Etiqueta"
+        verbose_name_plural = "Etiquetas"
+        ordering = ['name']
+
+
+# Validación personalizada para imágenes
 def validate_image_size(value):
     """Limita el tamaño de imágenes a 2MB."""
-    limit = 10 * 1024 * 1024  # 2MB
-    if value and value.size > limit:
+    limit = 2 * 1024 * 1024
+    if value.size > limit:
         raise ValidationError('La imagen no puede superar 2MB de tamaño.')
 
-# ---- Modelo Blog ----
+
 class Blog(models.Model):
     title = models.CharField(
         "Título del Blog",
         max_length=255,
         help_text="Ingrese un título descriptivo (máx. 255 caracteres)"
     )
-    content = CKEditor5Field(
+    content = RichTextUploadingField(
         "Contenido",
-        default='Escribe aquí tu contenido...'
+        default='Escribe aquí tu contenido...',
+        help_text="Editor completo con soporte para imágenes"
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Autor"
+        verbose_name="Autor",
+        related_name='blogs'
     )
     created_at = models.DateTimeField(
         "Fecha de creación",
         auto_now_add=True
     )
-    tag = models.CharField(
-        "Etiqueta",
-        max_length=50,
+    tags = models.ManyToManyField(
+        Tag,
+        verbose_name="Etiquetas",
         blank=True,
-        null=True,
-        help_text="Etiqueta para categorización (opcional)"
+        help_text="Seleccione las etiquetas correspondientes"
     )
-    imagen = models.ImageField(
+    image = models.ImageField(
         "Imagen destacada",
-        upload_to='blog_images/',
+        upload_to='blog_images/%Y/%m/%d/',
         blank=True,
         null=True,
         validators=[
             FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp']),
             validate_image_size
         ],
-        help_text="Formatos soportados: JPG, PNG (máx. 2MB)"
+        help_text="Formatos soportados: JPG, PNG, WEBP (máx. 2MB)"
     )
 
     def __str__(self):
@@ -61,12 +86,21 @@ class Blog(models.Model):
         verbose_name = "Entrada de Blog"
         verbose_name_plural = "Entradas de Blog"
         indexes = [
-            models.Index(fields=['title']),  # Índice para búsquedas
+            models.Index(fields=['title']),
+            models.Index(fields=['created_at']),
         ]
-        ordering = ['-created_at']  # Orden descendente por fecha
+        ordering = ['-created_at']
 
-# ---- Modelo Review ----
+
 class Review(models.Model):
+    RATING_CHOICES = [
+        (1, '★☆☆☆☆'),
+        (2, '★★☆☆☆'),
+        (3, '★★★☆☆'),
+        (4, '★★★★☆'),
+        (5, '★★★★★'),
+    ]
+
     blog = models.ForeignKey(
         Blog,
         on_delete=models.CASCADE,
@@ -76,13 +110,14 @@ class Review(models.Model):
     reviewer = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Revisor"
+        verbose_name="Revisor",
+        related_name='reviews'
     )
     rating = models.IntegerField(
         "Calificación",
-        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        choices=RATING_CHOICES,
         default=3,
-        help_text="Valor entre 1 (peor) y 5 (mejor)"
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
     comment = models.TextField(
         "Comentario",
@@ -94,13 +129,15 @@ class Review(models.Model):
     )
 
     def __str__(self):
-        return f"{self.reviewer.username} - {self.blog.title}"
+        return f"Reseña de {self.reviewer.username} para {self.blog.title}"
 
     class Meta:
         verbose_name = "Reseña"
         verbose_name_plural = "Reseñas"
+        unique_together = ['blog', 'reviewer']  # Un usuario solo puede reseñar una vez
+        ordering = ['-created_at']
 
-# ---- Modelo Comment ----
+
 class Comment(models.Model):
     review = models.ForeignKey(
         Review,
@@ -111,7 +148,8 @@ class Comment(models.Model):
     commenter = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name="Comentarista"
+        verbose_name="Comentarista",
+        related_name='comments'
     )
     content = models.TextField(
         "Contenido",
@@ -123,15 +161,9 @@ class Comment(models.Model):
     )
 
     def __str__(self):
-        return f"Comment by {self.commenter.username}"
+        return f"Comentario de {self.commenter.username}"
 
     class Meta:
         verbose_name = "Comentario"
         verbose_name_plural = "Comentarios"
-
-    class UserProfile(models.Model):
-        user = models.OneToOneField(User, on_delete=models.CASCADE)
-        image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-
-        def __str__(self):
-            return self.user.username
+        ordering = ['created_at']

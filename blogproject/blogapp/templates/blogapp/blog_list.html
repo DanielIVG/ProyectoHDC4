@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-  <h1 class="text-4xl font-extrabold mb-6 text-center text-neon neon-glow">All Blogs</h1>
-  <div class="grid gap-8 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+  <!-- Banner GIF -->
+  <div class="w-full max-h-[500px] overflow-hidden mb-8 animate-fade-in">
+    <img
+      src="{% static 'images/Website-Banner.gif' %}"
+      alt="GameVerse Banner"
+      class="w-full h-full object-cover"
+    >
+  </div>
+
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">All Blogs</h1>
+  <div class="grid gap-6">
     {% for blog in object_list %}
       <!-- Toda la tarjeta ahora es un enlace -->
       <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="block group">

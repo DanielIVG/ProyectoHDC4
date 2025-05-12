@@ -2,41 +2,89 @@
 {% load widget_tweaks %}
 
 {% block content %}
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 transition-all duration-700 ease-in-out animate-fade-in">
-    <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Crear Blog</h1>
-    <form method="post" enctype="multipart/form-data" class="space-y-6">
-      {% csrf_token %}
-      
-      {% for field in form %}
-        <div class="space-y-2">
-          <label for="{{ field.id_for_label }}" class="block text-sm font-semibold text-gray-900 dark:text-white">{{ field.label }}</label>
+<div class="bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
+  <h1 class="text-3xl font-bold mb-6 text-neon text-center tracking-wider">NUEVO BLOG</h1>
 
-          {% if field.name == "contenido" %}
-            {{ field|add_class:"ckeditor bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full min-h-[150px] max-h-[600px] border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 overflow-auto transition-all duration-300 ease-in-out" }}
-          {% else %}
-            {{ field|add_class:"bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-3 rounded-lg w-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 ease-in-out" }}
-          {% endif %}
+  <form method="post" enctype="multipart/form-data" class="space-y-6">
+    {% csrf_token %}
 
-          {% if field.errors %}
-            <p class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</p>
-          {% endif %}
+    <!-- Campo Título -->
+    <div class="space-y-2">
+      <label class="block text-neon/80 text-sm font-gamer tracking-wide">TÍTULO</label>
+      {{ form.title|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg px-4 py-3 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 font-gamer tracking-wide" }}
+      {% if form.title.errors %}
+        <p class="text-warning text-sm mt-1">{{ form.title.errors|striptags }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Campo Imagen -->
+    <div class="space-y-2">
+      <label class="block text-neon/80 text-sm font-gamer tracking-wide">IMAGEN DESTACADA</label>
+      <div class="relative">
+        {{ form.image|add_class:"absolute inset-0 w-full h-full opacity-0 cursor-pointer" }}
+        <div class="bg-gray-800 border-2 border-gray-700 rounded-lg p-4 text-center hover:border-neon transition-colors duration-300">
+          <span class="text-neon font-gamer">SELECCIONAR ARCHIVO</span>
+          <span id="file-name" class="text-gray-400 text-sm block mt-1">Ningún archivo seleccionado</span>
         </div>
-      {% endfor %}
-      
-      <div class="space-y-4">
-        <button type="submit" class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-all duration-500 ease-in-out shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-          Publicar
-        </button>
       </div>
-    </form>
-  </div>
+      {% if form.image.errors %}
+        <p class="text-warning text-sm mt-1">{{ form.image.errors|striptags }}</p>
+      {% endif %}
+    </div>
 
-  <style>
-    /* Opcional: para que CKEditor no se vea desalineado */
-    .cke_contents {
-      min-height: 150px !important;
-      max-height: 600px;
-      overflow-y: auto;
-    }
-  </style>
+    <!-- Campo Tags -->
+    <div class="space-y-2">
+      <label class="block text-neon/80 text-sm font-gamer tracking-wide">ETIQUETAS</label>
+      <div class="flex flex-wrap gap-3">
+        {% for tag in form.tags %}
+          <label class="inline-flex items-center">
+            {{ tag.tag }}
+            <span class="ml-2 px-3 py-1 rounded-full text-xs font-gamer tracking-wide border-2 border-neon/50 hover:border-neon transition-colors duration-200">
+              {{ tag.choice_label }}
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Campo Contenido -->
+    <div class="space-y-2">
+      <label class="block text-neon/80 text-sm font-gamer tracking-wide">CONTENIDO</label>
+      {{ form.content|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg p-4 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 min-h-[300px]" }}
+      {% if form.content.errors %}
+        <p class="text-warning text-sm mt-1">{{ form.content.errors|striptags }}</p>
+      {% endif %}
+    </div>
+
+    <!-- Botón Submit -->
+    <div class="pt-6">
+      <button type="submit" class="w-full bg-neon hover:bg-neon/90 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-wider border-2 border-black shadow-lg">
+        PUBLICAR BLOG
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Mostrar nombre del archivo seleccionado
+  document.getElementById('id_image').addEventListener('change', function(e) {
+    const fileName = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
+    document.getElementById('file-name').textContent = fileName;
+  });
+</script>
+
+<style>
+  .glow-effect {
+    box-shadow: 0 0 15px rgba(0, 255, 231, 0.3);
+  }
+  .ckeditor-wrapper {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  .ck.ck-editor__editable_inline {
+    background: #1F2937 !important;
+    color: white !important;
+    border: 2px solid #374151 !important;
+  }
+</style>
 {% endblock %}

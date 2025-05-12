@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogapp',
     'widget_tweaks',
-    'django_ckeditor_5',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -130,11 +131,14 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT =  BASE_DIR / 'media'
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 
 #Configuracion de CKEditor
-CKEDITOR_5_CONFIGS = {
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': ['heading', '|', 'bold', 'italic', 'link'],
+        'toolbar': 'Custom',
+        'height': 300,
+        'width': '100%',
     },
 }
