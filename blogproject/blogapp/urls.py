@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView, register_view, login_view, logout_view, ChangePasswordView    
+from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView, register_view, login_view, logout_view, DashboardView, ProfileUpdateView
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import PasswordChangeDoneView
+from django.urls import include, path
 
 app_name = 'blogapp'
 
@@ -15,7 +15,8 @@ urlpatterns = [
     path('blog/<int:blog_pk>/review/<int:review_pk>/comment/', CommentCreateView.as_view(), name='add_comment'),
     path('register/', register_view, name='register'),
     path('login/', login_view, name='login'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('dashboard/profile/', ProfileUpdateView.as_view(), name='profile_edit'),
     path('logout/', logout_view, name='logout'),
-    path('cambiar_password/', ChangePasswordView.as_view(), name ='cambiar_password'),
-    path('password_success/', PasswordChangeDoneView.as_view(template_name='blogapp/password_success.html'), name='password_success'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
