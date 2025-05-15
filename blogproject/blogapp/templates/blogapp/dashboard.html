@@ -1,42 +1,23 @@
 {% extends "blogapp/base.html" %}
 {% block content %}
-<div class="container-fluid">
-    <div class="row bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 transition-all duration-700 ease-in-out animate-fade-in">
-        <!-- Sidebar -->
-        <div class="col-md-3 bg-light sidebar">
-            <div class="sidebar-sticky pt-3">
-                <div class="text-center mb-4 text-blue-400 hover:text-blue-300">
-                    <h4>{{ user.username }}'s Dashboard</h4>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active text-blue-400 hover:text-blue-300" href="{% url 'blogapp:dashboard' %}">
-                            My Blogs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-blue-400 hover:text-blue-300" href="{% url 'blogapp:profile_edit' %}">
-                            Edit Profile
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-            <div class="blog-list">
-                {% for blog in blogs %}
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
-                    <h2 class="text-xl font-semibold mb-2">
-                      <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
-                    </h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }} - Tag: {{ blog.tag }}</p>
-                  </div>
-                {% empty %}
-                <p>You haven't created any blogs yet.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+<div class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6 dark:text-white text-gray-800">Mis Blogs</h2>
+  
+  <div class="space-y-6">
+    {% for blog in blogs %}
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900">
+        <h3 class="text-xl font-semibold mb-2">
+          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">
+            {{ blog.title }}
+          </a>
+        </h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ blog.created_at|date:"M d, Y" }} – Etiqueta: {{ blog.tag }}
+        </p>
+      </div>
+    {% empty %}
+      <p class="text-gray-500 dark:text-gray-300">Aún no has creado ningún blog.</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
