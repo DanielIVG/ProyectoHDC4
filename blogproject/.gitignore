@@ -1,7 +1,18 @@
+# Python
 __pycache__/
+*.py[cod]
 *.pyc
-*.pyo
-*.pyd
+
+# Django
 *.sqlite3
-.env
-.DS_Store
+*.log
+*.pot
+
+# Entornos virtuales
+venv/
+.env/
+.env.local
+
+# IDE/Editor
+.vscode/
+.idea/
