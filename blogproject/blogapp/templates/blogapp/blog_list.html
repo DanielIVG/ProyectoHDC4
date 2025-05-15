@@ -35,14 +35,23 @@
           </div>
 
           <!-- Título -->
-          <h2 class="text-2xl font-bold mb-2 text-neon group-hover:underline">{{ blog.title }}</h2>
+          <h2 class="text-2xl font-bold text-neon group-hover:underline">{{ blog.title }}</h2>
 
           <!-- Detalles -->
-          <p class="text-sm text-white mb-3">
+          <p class="text-sm text-white">
             De: <span class="font-semibold text-blue-300">{{ blog.author.username }}</span> |
             {{ blog.created_at|date:"M d, Y" }} |
-            <span class="bg-neon text-black py-1 px-2 rounded-full text-xs">{{ blog.tag }}</span>
           </p>
+
+          <div class="mt-2 flex flex-wrap gap-2">
+            {% for tag in blog.tags.all %}
+              <a href="{% url 'blogapp:blog_list' %}?tag={{ tag.name }}" class="bg-purple-700 text-white px-2 py-1 rounded-full text-sm hover:bg-green-400 hover:text-black transition">
+                {{ tag.name }}
+              </a>
+            {% empty %}
+              <span class="text-white text-xs">Sin etiquetas</span>
+            {% endfor %}
+          </div>
 
           <!-- Resumen -->
           <p class="text-md text-gray-300 mb-4 line-clamp-3">{{ blog.description }}</p>
