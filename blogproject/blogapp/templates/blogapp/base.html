@@ -102,7 +102,14 @@
             <a href="{% url 'blogapp:register' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium">Register</a>
           {% else %}
             <a href="{% url 'blogapp:add_blog' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium">Nuevo Blog</a>
-            <a href="{% url 'blogapp:logout' %}" class="bg-warning px-4 py-2 rounded-lg hover:bg-[#ff1a75] transition-all duration-300 text-white">Logout</a>
+            
+
+            <!-- Botón hamburguesa para abrir el sidebar -->
+            <button data-drawer-target="profile-sidebar" data-drawer-show="profile-sidebar" aria-controls="profile-sidebar" class="p-2 text-white hover:text-neon transition">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+              </svg>
+            </button>
           {% endif %}
         {% endif %}
       </div>
@@ -116,6 +123,8 @@
     </div>
   </main>
   {% include 'blogapp/sidebar.html' %}
+
+
 
   <!-- Footer -->
   <footer class="text-center py-6 bg-gray-800 text-gray-400">

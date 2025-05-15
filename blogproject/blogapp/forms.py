@@ -16,9 +16,9 @@ class BlogForm(forms.ModelForm):
     )
 
     tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
+        queryset=Tag.objects.none(),  # inicializa vacío
         widget=forms.CheckboxSelectMultiple(
-            attrs={'class': 'flex flex-wrap gap-4'}
+            attrs={'class': 'checkbox-tag flex flex-wrap gap-4'}
         ),
         required=False,
         label="Etiquetas"
@@ -47,6 +47,8 @@ class BlogForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['content'].initial = 'Escribe aquí tu contenido...'
+        self.fields['tags'].queryset = Tag.objects.all()
+        self.fields['tags'].widget = forms.HiddenInput()  # ← oculta el campo
 
 
 class ReviewForm(forms.ModelForm):

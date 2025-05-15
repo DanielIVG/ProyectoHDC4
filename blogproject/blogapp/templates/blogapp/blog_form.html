@@ -2,15 +2,15 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
-  <h1 class="text-3xl font-bold mb-6 text-neon text-center tracking-wider">NUEVO BLOG</h1>
+<div class="bg-gray-200 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
+  <h1 class="text-3xl font-bold mb-6 text-black dark:text-neon text-center tracking-wider">NUEVO BLOG</h1>
 
   <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
 
     <!-- Campo Título -->
     <div class="space-y-2">
-      <label class="block text-neon/80 text-sm font-gamer tracking-wide">TÍTULO</label>
+      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">TÍTULO</label>
       {{ form.title|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg px-4 py-3 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 font-gamer tracking-wide" }}
       {% if form.title.errors %}
         <p class="text-warning text-sm mt-1">{{ form.title.errors|striptags }}</p>
@@ -19,12 +19,12 @@
 
     <!-- Campo Imagen -->
     <div class="space-y-2">
-      <label class="block text-neon/80 text-sm font-gamer tracking-wide">IMAGEN DESTACADA</label>
+      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">IMAGEN DESTACADA</label>
       <div class="relative">
         {{ form.image|add_class:"absolute inset-0 w-full h-full opacity-0 cursor-pointer" }}
         <div class="bg-gray-800 border-2 border-gray-700 rounded-lg p-4 text-center hover:border-neon transition-colors duration-300">
           <span class="text-neon font-gamer">SELECCIONAR ARCHIVO</span>
-          <span id="file-name" class="text-gray-400 text-sm block mt-1">Ningún archivo seleccionado</span>
+          <span id="file-name" class="text-white text-sm block mt-1">Ningún archivo seleccionado</span>
         </div>
       </div>
       {% if form.image.errors %}
@@ -32,24 +32,43 @@
       {% endif %}
     </div>
 
-    <!-- Campo Tags -->
-    <div class="space-y-2">
-      <label class="block text-neon/80 text-sm font-gamer tracking-wide">ETIQUETAS</label>
-      <div class="flex flex-wrap gap-3">
-        {% for tag in form.tags %}
-          <label class="inline-flex items-center">
-            {{ tag.tag }}
-            <span class="ml-2 px-3 py-1 rounded-full text-xs font-gamer tracking-wide border-2 border-neon/50 hover:border-neon transition-colors duration-200">
-              {{ tag.choice_label }}
-            </span>
-          </label>
-        {% endfor %}
+    <!-- Campo Tags como dropdown hover -->
+    <div class="space-y-2 relative z-20">
+      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
+
+      <!-- Botón Dropdown -->
+      <button id="dropdownTagsButton"
+        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        type="button">
+        Selecciona etiquetas
+        <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
+        </svg>
+      </button>
+
+
+      <!-- Dropdown -->
+      <div id="dropdownTags" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-56 dark:bg-gray-700 absolute top-full mt-2 left-0 z-30">
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTagsButton">
+          {% for tag in form.fields.tags.queryset %}
+            <li>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white tag-option" data-id="{{ tag.id }}">{{ tag.name }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
-    </div>
+
+  <!-- Etiquetas seleccionadas -->
+  <div id="selected-tags" class="mt-2 flex flex-wrap gap-2"></div>
+
+  <!-- Campo oculto para enviar los IDs -->
+  <input type="hidden" name="tags" id="selected-tags-input" />
+</div>
+
 
     <!-- Campo Contenido -->
     <div class="space-y-2">
-      <label class="block text-neon/80 text-sm font-gamer tracking-wide">CONTENIDO</label>
+      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">CONTENIDO</label>
       {{ form.content|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg p-4 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 min-h-[300px]" }}
       {% if form.content.errors %}
         <p class="text-warning text-sm mt-1">{{ form.content.errors|striptags }}</p>
@@ -72,6 +91,60 @@
     document.getElementById('file-name').textContent = fileName;
   });
 </script>
+
+<script>
+  const selectedTags = new Set();
+  const selectedTagsInput = document.getElementById('selected-tags-input');
+  const selectedTagsContainer = document.getElementById('selected-tags');
+
+  document.querySelectorAll('.tag-option').forEach(el => {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      const tagId = this.dataset.id;
+      const tagName = this.textContent;
+
+      if (selectedTags.has(tagId)) return;
+
+      selectedTags.add(tagId);
+      updateSelectedTags();
+
+      // Crear pill visual
+      const pill = document.createElement('span');
+      pill.className = 'bg-neon text-black text-sm px-3 py-1 rounded-full font-medium';
+      pill.textContent = tagName;
+
+      // Eliminar etiqueta si se hace click sobre la pill
+      pill.addEventListener('click', () => {
+        selectedTags.delete(tagId);
+        pill.remove();
+        updateSelectedTags();
+      });
+
+      selectedTagsContainer.appendChild(pill);
+    });
+  });
+
+  function updateSelectedTags() {
+    selectedTagsInput.value = Array.from(selectedTags).join(',');
+  }
+</script>
+
+<script>
+  const dropdownBtn = document.getElementById('dropdownTagsButton');
+  const dropdownMenu = document.getElementById('dropdownTags');
+
+  dropdownBtn.addEventListener('click', function () {
+    dropdownMenu.classList.toggle('hidden');
+  });
+
+  // Ocultar dropdown si se hace clic fuera
+  document.addEventListener('click', function (e) {
+    if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.classList.add('hidden');
+    }
+  });
+</script>
+
 
 <style>
   .glow-effect {
