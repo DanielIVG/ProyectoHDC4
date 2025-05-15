@@ -5,6 +5,13 @@
 <div class="bg-gray-200 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
   <h1 class="text-3xl font-bold mb-6 text-black dark:text-neon text-center tracking-wider">NUEVO BLOG</h1>
 
+  {% if form.errors %}
+  <div class="text-red-400 bg-red-900 p-4 rounded mb-4">
+    <p><strong>Errores:</strong></p>
+    {{ form.errors }}
+  </div>
+  {% endif %}
+
   <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
 
@@ -58,12 +65,12 @@
         </ul>
       </div>
 
-  <!-- Etiquetas seleccionadas -->
-  <div id="selected-tags" class="mt-2 flex flex-wrap gap-2"></div>
+      <!-- Etiquetas seleccionadas -->
+      <div id="selected-tags" class="mt-2 flex flex-wrap gap-2"></div>
 
-  <!-- Campo oculto para enviar los IDs -->
-  <input type="hidden" name="tags" id="selected-tags-input" />
-</div>
+        <!-- Campo oculto para enviar los IDs -->
+        <input type="hidden" name="tags" id="selected-tags-input" />
+       </div>
 
 
     <!-- Campo Contenido -->

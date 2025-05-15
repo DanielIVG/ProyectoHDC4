@@ -13,7 +13,7 @@ class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
     context_object_name = 'blogs'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('author').prefetch_related('tags')
@@ -50,14 +50,6 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         response = super().form_valid(form)
-
-        # Procesar los tags enviados como string separado por comas desde el campo oculto
-        tag_ids_str = self.request.POST.get('tags', '')
-        if tag_ids_str:
-            tag_ids = [int(id) for id in tag_ids_str.split(',') if id.isdigit()]
-            tags = Tag.objects.filter(id__in=tag_ids)
-            self.object.tags.set(tags)
-
         messages.success(self.request, '¡Blog creado exitosamente!')
         return response
 
