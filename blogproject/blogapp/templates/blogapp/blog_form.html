@@ -76,8 +76,7 @@
         </div>
         <div class="px-4 py-2 rounded-b-lg">
           <label for="editor" class="sr-only">Contenido del blog</label>
-          {{ form.content|add_class:"block w-full text-sm bg-white border-0 focus:ring-0 dark:bg-gray-800 dark:placeholder-gray-400 min-h-[300px]"|attr:"id:editor"|attr:"placeholder:Escribe el contenido del blog aquí..." }}
-        </div>
+        {{ form.content|add_class:"ckeditor"|attr:"id:editor"|attr:"placeholder:Escribe el contenido del blog aquí..." }}        </div>
       </div>
 
       {% if form.content.errors %}
@@ -254,4 +253,6 @@
   }
 </style>
 
+<script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+<script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 {% endblock %}

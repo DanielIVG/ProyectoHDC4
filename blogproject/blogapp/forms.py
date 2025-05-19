@@ -44,7 +44,6 @@ class BlogForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['content'].initial = 'Escribe aquí tu contenido...'  # ❌ Eliminar esto
         self.fields['tags'].queryset = Tag.objects.all()
 
 class ReviewForm(forms.ModelForm):

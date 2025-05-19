@@ -57,7 +57,7 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
         post_data = request.POST.copy()
 
         # Convertimos 'tags' de "2,7" a ['2', '7']
-        tags_str = post_data.get('tags', '')
+        tags_str = post_data.get('tags_input', '')
         if tags_str:
             tag_list = [tag_id.strip() for tag_id in tags_str.split(',') if tag_id.strip().isdigit()]
             post_data.setlist('tags', tag_list)
