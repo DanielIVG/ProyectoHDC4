@@ -6,7 +6,7 @@ from django.core.validators import (
     FileExtensionValidator
 )
 from django.core.exceptions import ValidationError
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field  # Cambio aquí para CKEditor 5
 
 
 class Tag(models.Model):
@@ -32,7 +32,6 @@ class Tag(models.Model):
         ordering = ['name']
 
 
-# Validación personalizada para imágenes
 def validate_image_size(value):
     """Limita el tamaño de imágenes a 2MB."""
     limit = 2 * 1024 * 1024
@@ -46,7 +45,7 @@ class Blog(models.Model):
         max_length=255,
         help_text="Ingrese un título descriptivo (máx. 255 caracteres)"
     )
-    content = RichTextUploadingField(
+    content = CKEditor5Field(  # Aquí uso CKEditor 5
         "Contenido",
         default='Escribe aquí tu contenido...',
         help_text="Editor completo con soporte para imágenes"
@@ -134,7 +133,7 @@ class Review(models.Model):
     class Meta:
         verbose_name = "Reseña"
         verbose_name_plural = "Reseñas"
-        unique_together = ['blog', 'reviewer']  # Un usuario solo puede reseñar una vez
+        unique_together = ['blog', 'reviewer']
         ordering = ['-created_at']
 
 
