@@ -69,7 +69,7 @@
       <div id="selected-tags" class="mt-2 flex flex-wrap gap-2"></div>
 
         <!-- Campo oculto para enviar los IDs -->
-        <input type="hidden" name="tags" id="selected-tags-input" />
+        <input type="hidden" name="tags_input" id="tags-input" value="">
        </div>
 
        
@@ -100,40 +100,40 @@
 </script>
 
 <script>
-  const selectedTags = new Set();
-  const selectedTagsInput = document.getElementById('selected-tags-input');
-  const selectedTagsContainer = document.getElementById('selected-tags');
+const selectedTags = new Set();
+const selectedTagsContainer = document.getElementById('selected-tags');
+const tagsInput = document.getElementById('tags-input');
 
-  document.querySelectorAll('.tag-option').forEach(el => {
+document.querySelectorAll('.tag-option').forEach(el => {
     el.addEventListener('click', function (e) {
-      e.preventDefault();
-      const tagId = this.dataset.id;
-      const tagName = this.textContent;
+        e.preventDefault();
+        const tagId = this.dataset.id;
+        const tagName = this.textContent;
 
-      if (selectedTags.has(tagId)) return;
+        if (selectedTags.has(tagId)) return;
 
-      selectedTags.add(tagId);
-      updateSelectedTags();
-
-      // Crear pill visual
-      const pill = document.createElement('span');
-      pill.className = 'bg-neon text-black text-sm px-3 py-1 rounded-full font-medium';
-      pill.textContent = tagName;
-
-      // Eliminar etiqueta si se hace click sobre la pill
-      pill.addEventListener('click', () => {
-        selectedTags.delete(tagId);
-        pill.remove();
+        selectedTags.add(tagId);
         updateSelectedTags();
-      });
 
-      selectedTagsContainer.appendChild(pill);
+        // Crear pill visual
+        const pill = document.createElement('span');
+        pill.className = 'bg-neon text-black text-sm px-3 py-1 rounded-full font-medium';
+        pill.textContent = tagName;
+
+        // Eliminar etiqueta si se hace click sobre la pill
+        pill.addEventListener('click', () => {
+            selectedTags.delete(tagId);
+            pill.remove();
+            updateSelectedTags();
+        });
+
+        selectedTagsContainer.appendChild(pill);
     });
-  });
+});
 
-  function updateSelectedTags() {
-    selectedTagsInput.value = Array.from(selectedTags).join(',');
-  }
+function updateSelectedTags() {
+    tagsInput.value = Array.from(selectedTags).join(',');
+}
 </script>
 
 <script>

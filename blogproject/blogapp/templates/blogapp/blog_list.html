@@ -36,13 +36,15 @@
             {{ blog.created_at|date:"M d, Y" }} |
           </p>
 
+          <!-- Tags mejorados -->
           <div class="mt-2 flex flex-wrap gap-2">
             {% for tag in blog.tags.all %}
-              <a href="{% url 'blogapp:blog_list' %}?tag={{ tag.name }}" class="bg-purple-700 text-white px-2 py-1 rounded-full text-sm hover:bg-green-400 hover:text-black transition">
-                {{ tag.name }}
+              <a href="{% url 'blogapp:blog_list' %}?tag={{ tag.name }}" 
+                 class="bg-gradient-to-r from-purple-600 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium hover:from-green-400 hover:to-blue-400 hover:text-black transition-all duration-300 transform hover:scale-105 shadow-md">
+                #{{ tag.name }}
               </a>
             {% empty %}
-              <span class="text-white text-xs">Sin etiquetas</span>
+              <span class="text-gray-400 text-xs italic">No hay etiquetas</span>
             {% endfor %}
           </div>
 
