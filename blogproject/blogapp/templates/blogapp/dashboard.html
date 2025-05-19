@@ -2,7 +2,14 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
   <h2 class="text-2xl font-bold mb-6 dark:text-white text-gray-800">Mis Blogs</h2>
-  
+
+  <!-- Botón para ver blogs populares -->
+  <div class="mb-6">
+    <a href="{% url 'blogapp:popular_blogs' %}" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded shadow transition duration-300">
+      📈 Ver Blogs Populares
+    </a>
+  </div>
+
   <div class="space-y-6">
     {% for blog in blogs %}
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900">

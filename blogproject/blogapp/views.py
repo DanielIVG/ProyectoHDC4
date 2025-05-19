@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count
 from .forms import RegisterForm, BlogForm, UserProfileForm, ReviewForm
+from django.db.models import Count, Avg
 
 
 class BlogListView(ListView):
@@ -88,15 +89,23 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blogapp/review_form.html'
 
     def form_valid(self, form):
+        # Obtenemos el blog correspondiente con el pk pasado en la URL
+        blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+
+        # Verificamos si el usuario ya ha hecho una reseña para este blog
+        if Review.objects.filter(blog=blog, reviewer=self.request.user).exists():
+            messages.error(self.request, 'Ya has enviado una reseña para este blog.')
+            return redirect('blogapp:blog_detail', pk=blog.pk)
+
+        # Si no hay reseña previa, asignamos al revisor (usuario actual)
         form.instance.reviewer = self.request.user
-        form.instance.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
-        if Review.objects.filter(blog=form.instance.blog, reviewer=self.request.user).exists():
-            messages.error(self.request, 'Ya has enviado una reseña para este blog')
-            return redirect('blogapp:blog_detail', pk=self.kwargs['pk'])
+        form.instance.blog = blog
+
         messages.success(self.request, '¡Reseña enviada exitosamente!')
         return super().form_valid(form)
 
     def get_success_url(self):
+        # Redirigimos al detalle del blog después de una reseña exitosa
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
 
@@ -194,3 +203,22 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Perfil actualizado correctamente')
         return super().form_valid(form)
+
+class PopularBlogsView(ListView):
+    model = Blog
+    template_name = 'blogapp/blog_popular.html'
+    context_object_name = 'blogs'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # Anotamos los blogs con el promedio de rating y número de comentarios
+        queryset = Blog.objects.annotate(
+            avg_rating=Avg('reviews__rating'),
+            num_comments=Count('reviews__comments')
+        ).order_by('-avg_rating', '-num_comments', '-created_at').select_related('author').prefetch_related('tags')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['popular_tags'] = Tag.objects.annotate(num_blogs=Count('blog')).order_by('-num_blogs')[:10]
+        return context
