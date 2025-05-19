@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Blogs Populares{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">📈 Blogs Populares</h1>
+
+    <div class="row">
+        <!-- Lista de blogs -->
+        <div class="col-md-8">
+            {% for blog in blogs %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3><a href="{% url 'blogapp:blog_detail' blog.pk %}">{{ blog.title }}</a></h3>
+                        <p class="text-muted">por {{ blog.author.username }} — {{ blog.created_at|date:"d M Y" }}</p>
+
+                        {% if blog.avg_rating %}
+                            <p><strong>⭐ Promedio de Rating:</strong> {{ blog.avg_rating|floatformat:1 }}</p>
+                        {% endif %}
+                        <p><strong>💬 Comentarios:</strong> {{ blog.num_comments }}</p>
+
+                        <p>{{ blog.content|truncatewords:30 }}</p>
+
+                        <div>
+                            {% for tag in blog.tags.all %}
+                                <span class="badge bg-secondary">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay blogs populares aún.</p>
+            {% endfor %}
+
+            <!-- Paginación -->
+            {% if is_paginated %}
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% endif %}
+                        {% for num in page_obj.paginator.page_range %}
+                            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+
+        <!-- Etiquetas populares -->
+        <div class="col-md-4">
+            <h4 class="mb-3">🏷️ Etiquetas populares</h4>
+            <ul class="list-group">
+                {% for tag in popular_tags %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="?tag={{ tag.name }}">{{ tag.name }}</a>
+                        <span class="badge bg-primary rounded-pill">{{ tag.num_blogs }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

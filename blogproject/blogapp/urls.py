@@ -3,6 +3,7 @@ from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreate
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from .views import PopularBlogsView
 
 app_name = 'blogapp'
 
@@ -19,4 +20,5 @@ urlpatterns = [
     path('dashboard/profile/', ProfileUpdateView.as_view(), name='profile_edit'),
     path('logout/', logout_view, name='logout'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('blogs/populares/', PopularBlogsView.as_view(), name='popular_blogs'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

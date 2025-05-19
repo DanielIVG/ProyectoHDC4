@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Count
 from .forms import RegisterForm, BlogForm, UserProfileForm, ReviewForm
+from django.db.models import Count, Avg
 
 
 class BlogListView(ListView):
@@ -202,3 +203,22 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, 'Perfil actualizado correctamente')
         return super().form_valid(form)
+
+class PopularBlogsView(ListView):
+    model = Blog
+    template_name = 'blogapp/blog_popular.html'
+    context_object_name = 'blogs'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # Anotamos los blogs con el promedio de rating y número de comentarios
+        queryset = Blog.objects.annotate(
+            avg_rating=Avg('reviews__rating'),
+            num_comments=Count('reviews__comments')
+        ).order_by('-avg_rating', '-num_comments', '-created_at').select_related('author').prefetch_related('tags')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['popular_tags'] = Tag.objects.annotate(num_blogs=Count('blog')).order_by('-num_blogs')[:10]
+        return context
