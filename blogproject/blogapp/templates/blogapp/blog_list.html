@@ -4,20 +4,19 @@
 {% block content %}
   <!-- Banner GIF -->
   <div class="w-full max-h-[500px] overflow-hidden mb-8 animate-fade-in">
-    <img
-      src="{% static 'images/Website-Banner.gif' %}"
-      alt="GameVerse Banner"
-      class="w-full h-full object-cover"
-    >
+    <img src="{% static 'images/Website-Banner.gif' %}" alt="GameVerse Banner" class="w-full h-full object-cover">
   </div>
 
-  <h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">All Blogs</h1>
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white">Blogs Recientes</h1>
   <div class="grid gap-6">
     {% for blog in object_list %}
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
         <h2 class="text-xl font-semibold mb-2">
           <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">{{ blog.title }}</a>
         </h2>
+        <div class="prose prose-sm dark:prose-invert max-w-none mb-2 line-clamp-3">
+          {{ blog.content|safe|truncatechars_html:150 }}
+        </div>
         <p class="text-sm text-gray-500 dark:text-gray-400">by {{ blog.author.username }} - {{ blog.created_at }} - Tag: {{ blog.tag }}</p>
       </div>
     {% empty %}

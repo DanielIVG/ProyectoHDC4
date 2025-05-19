@@ -68,15 +68,23 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
     template_name = 'blogapp/review_form.html'
 
     def form_valid(self, form):
+        # Obtenemos el blog correspondiente con el pk pasado en la URL
+        blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+
+        # Verificamos si el usuario ya ha hecho una reseña para este blog
+        if Review.objects.filter(blog=blog, reviewer=self.request.user).exists():
+            messages.error(self.request, 'Ya has enviado una reseña para este blog.')
+            return redirect('blogapp:blog_detail', pk=blog.pk)
+
+        # Si no hay reseña previa, asignamos al revisor (usuario actual)
         form.instance.reviewer = self.request.user
-        form.instance.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
-        if Review.objects.filter(blog=form.instance.blog, reviewer=self.request.user).exists():
-            messages.error(self.request, 'Ya has enviado una reseña para este blog')
-            return redirect('blogapp:blog_detail', pk=self.kwargs['pk'])
+        form.instance.blog = blog
+
         messages.success(self.request, '¡Reseña enviada exitosamente!')
         return super().form_valid(form)
 
     def get_success_url(self):
+        # Redirigimos al detalle del blog después de una reseña exitosa
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
 
