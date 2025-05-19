@@ -153,7 +153,9 @@
       {% block content %}{% endblock %}
     </div>
   </main>
-  {% include 'blogapp/sidebar.html' %}
+  {% if user.is_authenticated %}
+    {% include 'blogapp/sidebar.html' %}
+  {% endif %}
 
 
 

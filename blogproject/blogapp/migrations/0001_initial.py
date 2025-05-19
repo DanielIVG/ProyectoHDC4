@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Nombre único para la categorización', max_length=50, unique=True, verbose_name='Nombre del Tag')),
-                ('color', models.CharField(default='#3B82F6', help_text='Color en formato HEX (ej: #3B82F6)', max_length=7, verbose_name='Color del Tag')),
+                ('color', models.CharField(default="#0D0E0F", help_text='Color en formato HEX (ej: #3B82F6)', max_length=7, verbose_name='Color del Tag')),
             ],
             options={
                 'verbose_name': 'Etiqueta',
