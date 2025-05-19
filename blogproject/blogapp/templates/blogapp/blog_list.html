@@ -12,19 +12,12 @@
   </div>
 
   <h1 class="text-3xl font-bold mb-6 text-center text-white">Todos los Blogs</h1>
-  <div class="grid gap-6">
-    {% for blog in object_list %}
+  <div class="grid gap-6 mb-8">
+    {% for blog in page_obj %}
       <!-- Toda la tarjeta ahora es un enlace -->
       <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="block group">
         <div class="bg-gradient-to-r from-gray-900 via-purple-800 to-blue-600 rounded-lg shadow-2xl p-6 group-hover:scale-105 group-hover:shadow-xl transition-all duration-500 ease-in-out dark:text-white text-gray-100 animate-fade-in cursor-pointer">
           
-          <div class="mt-2 flex flex-wrap gap-2">
-            {% for tag in blog.tags.all %}
-            <a href="?tag={{ tag.name }}" class="bg-purple-700 text-white px-2 py-1 rounded-full text-sm hover:bg-green-400 hover:text-black transition">
-
-            {% endfor %}
-          </div>
-
           <!-- Imagen -->
           <div class="w-full mb-4">
             {% if blog.image %}
@@ -56,7 +49,7 @@
           <!-- Resumen -->
           <p class="text-md text-gray-300 mb-4 line-clamp-3">{{ blog.description }}</p>
 
-          <!-- Botones visuales (no funcionales si toda la tarjeta es clickeable, pero pueden ser visuales) -->
+          <!-- Botones visuales -->
           <div class="flex justify-between items-center opacity-70 group-hover:opacity-100 transition-opacity duration-300">
             <span class="text-neon font-semibold">Leer más</span>
             <div class="flex items-center space-x-2 text-neon">
@@ -64,11 +57,64 @@
               <i class="fas fa-share-alt hover:text-red-400"></i>
             </div>
           </div>
-
         </div>
       </a>
     {% empty %}
       <p class="text-black dark:text-white text-center">No hay blogs publicados aún.</p>
     {% endfor %}
   </div>
+
+  <!-- Paginación -->
+  {% if page_obj.has_other_pages %}
+  <nav aria-label="Page navigation" class="flex justify-center mb-8">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      {% if page_obj.has_previous %}
+        <li>
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}" 
+             class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Anterior
+          </a>
+        </li>
+      {% else %}
+        <li>
+          <span class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-400 bg-white border border-e-0 border-gray-300 rounded-s-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-500 cursor-not-allowed">
+            Anterior
+          </span>
+        </li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <li>
+            <span class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+              {{ num }}
+            </span>
+          </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li>
+            <a href="?page={{ num }}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}" 
+               class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+              {{ num }}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <li>
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}" 
+             class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Siguiente
+          </a>
+        </li>
+      {% else %}
+        <li>
+          <span class="flex items-center justify-center px-4 h-10 leading-tight text-gray-400 bg-white border border-gray-300 rounded-e-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-500 cursor-not-allowed">
+            Siguiente
+          </span>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% endif %}
 {% endblock %}

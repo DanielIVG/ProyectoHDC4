@@ -40,8 +40,8 @@
     </div>
 
     <!-- Campo Tags como dropdown hover -->
-    <div class="space-y-2 relative z-20">
-      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
+      <div class="space-y-2 relative z-20">
+        <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
 
       <!-- Botón Dropdown -->
       <button id="dropdownTagsButton"
@@ -59,7 +59,7 @@
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTagsButton">
           {% for tag in form.fields.tags.queryset %}
             <li>
-              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white tag-option" data-id="{{ tag.id }}">{{ tag.name }}</a>
+              <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white tag-option" data-id="{{ tag.id }}" data-name="{{ tag.name }}">{{ tag.name }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -72,7 +72,7 @@
         <input type="hidden" name="tags" id="selected-tags-input" />
        </div>
 
-
+       
     <!-- Campo Contenido -->
     <div class="space-y-2">
       <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">CONTENIDO</label>
