@@ -17,11 +17,8 @@ class BlogForm(forms.ModelForm):
 
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple(
-            attrs={'class': 'flex flex-wrap gap-4'}
-        ),
         required=False,
-        label="Etiquetas"
+        widget=forms.MultipleHiddenInput  # El widget no afecta mucho porque lo manejas tú
     )
 
     class Meta:
@@ -35,6 +32,7 @@ class BlogForm(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'class': 'block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neon file:text-black hover:file:bg-neon/90'
             }),
+            'tags': forms.MultipleHiddenInput(),
         }
         labels = {
             'title': 'Título',
@@ -47,6 +45,8 @@ class BlogForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['content'].initial = 'Escribe aquí tu contenido...'
+        self.fields['tags'].queryset = Tag.objects.all()
+        #self.fields['tags'].widget = forms.HiddenInput()  # ← oculta el campo
 
 
 class ReviewForm(forms.ModelForm):

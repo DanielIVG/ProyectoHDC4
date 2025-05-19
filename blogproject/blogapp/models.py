@@ -62,9 +62,7 @@ class Blog(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-        verbose_name="Etiquetas",
-        blank=True,
-        help_text="Seleccione las etiquetas correspondientes"
+        blank=True
     )
     image = models.ImageField(
         "Imagen destacada",

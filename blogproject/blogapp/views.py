@@ -13,7 +13,7 @@ class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
     context_object_name = 'blogs'
-    paginate_by = 10
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('author').prefetch_related('tags')
@@ -47,11 +47,31 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
     form_class = BlogForm
     template_name = 'blogapp/blog_form.html'
 
+    def post(self, request, *args, **kwargs):
+        # Copiamos request.POST para modificarlo
+        post_data = request.POST.copy()
+
+        # Convertimos 'tags' de "2,7" a ['2', '7']
+        tags_str = post_data.get('tags', '')
+        if tags_str:
+            tag_list = [tag_id.strip() for tag_id in tags_str.split(',') if tag_id.strip().isdigit()]
+            post_data.setlist('tags', tag_list)
+        else:
+            post_data.setlist('tags', [])
+
+        # Reemplazamos request.POST con la modificada
+        request.POST = post_data
+
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.author = self.request.user
-        response = super().form_valid(form)
+
+        # Guardamos el objeto (ya con tags como lista)
+        self.object = form.save()
+
         messages.success(self.request, '¡Blog creado exitosamente!')
-        return response
+        return super().form_valid(form)  # ahora que self.object existe
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.object.pk})
