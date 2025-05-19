@@ -13,7 +13,7 @@ class BlogListView(ListView):
     model = Blog
     template_name = 'blogapp/blog_list.html'
     context_object_name = 'blogs'
-    paginate_by = 5
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset().select_related('author').prefetch_related('tags')
@@ -26,6 +26,10 @@ class BlogListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['popular_tags'] = Tag.objects.annotate(num_blogs=Count('blog')).order_by('-num_blogs')[:10]
+        tag_slug = self.request.GET.get('tag')
+        if tag_slug:
+            context['current_tag'] = get_object_or_404(Tag, name=tag_slug)
+        
         return context
 
 

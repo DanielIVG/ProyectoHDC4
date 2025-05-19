@@ -15,13 +15,11 @@ class BlogForm(forms.ModelForm):
         label="Contenido"
     )
 
-    tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.none(),  # inicializa vacío
-        widget=forms.CheckboxSelectMultiple(
-            attrs={'class': 'checkbox-tag flex flex-wrap gap-4'}
-        ),
+    tags_input = forms.CharField(
         required=False,
-        label="Etiquetas"
+        widget=forms.HiddenInput(),
+        label=" "
+    
     )
 
     class Meta:
@@ -35,6 +33,7 @@ class BlogForm(forms.ModelForm):
             'image': forms.FileInput(attrs={
                 'class': 'block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-neon file:text-black hover:file:bg-neon/90'
             }),
+            'tags': forms.MultipleHiddenInput(),
         }
         labels = {
             'title': 'Título',
