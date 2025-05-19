@@ -18,7 +18,7 @@ class BlogForm(forms.ModelForm):
     tags = forms.ModelMultipleChoiceField(
         queryset=Tag.objects.all(),
         required=False,
-        widget=forms.MultipleHiddenInput  # El widget no afecta mucho porque lo manejas tú
+        widget=forms.MultipleHiddenInput
     )
 
     class Meta:
@@ -44,10 +44,8 @@ class BlogForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['content'].initial = 'Escribe aquí tu contenido...'
+        # self.fields['content'].initial = 'Escribe aquí tu contenido...'  # ❌ Eliminar esto
         self.fields['tags'].queryset = Tag.objects.all()
-        #self.fields['tags'].widget = forms.HiddenInput()  # ← oculta el campo
-
 
 class ReviewForm(forms.ModelForm):
     class Meta:

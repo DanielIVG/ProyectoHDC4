@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load static %}
 
 {% block content %}
 <div class="bg-gray-200 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
@@ -39,11 +40,9 @@
       {% endif %}
     </div>
 
-    <!-- Campo Tags como dropdown hover -->
-      <div class="space-y-2 relative z-20">
-        <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
-
-      <!-- Botón Dropdown -->
+    <!-- Campo Tags -->
+    <div class="space-y-2 relative z-20">
+      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
       <button id="dropdownTagsButton"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button">
@@ -53,8 +52,6 @@
         </svg>
       </button>
 
-
-      <!-- Dropdown -->
       <div id="dropdownTags" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-56 dark:bg-gray-700 absolute top-full mt-2 left-0 z-30">
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTagsButton">
           {% for tag in form.fields.tags.queryset %}
@@ -65,18 +62,29 @@
         </ul>
       </div>
 
-      <!-- Etiquetas seleccionadas -->
       <div id="selected-tags" class="mt-2 flex flex-wrap gap-2"></div>
+      <input type="hidden" name="tags_input" id="tags-input" value="">
+    </div>
 
-        <!-- Campo oculto para enviar los IDs -->
-        <input type="hidden" name="tags_input" id="tags-input" value="">
-       </div>
-
-       
     <!-- Campo Contenido -->
     <div class="space-y-2">
       <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">CONTENIDO</label>
-      {{ form.content|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg p-4 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 min-h-[300px]" }}
+      
+      <div class="w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-md">
+        <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-600">
+          <!-- Toolbar personalizada -->
+        </div>
+        <div class="px-4 py-2 rounded-b-lg">
+          <label for="editor" class="sr-only">Contenido del blog</label>
+          {{ form.content|add_class:"block w-full text-sm bg-white border-0 focus:ring-0 dark:bg-gray-800 dark:placeholder-gray-400 min-h-[300px]"|attr:"id:editor"|attr:"placeholder:Escribe el contenido del blog aquí..." }}
+        </div>
+      </div>
+
+      {% if form.content.errors %}
+        <p class="text-warning text-sm mt-1">{{ form.content.errors|striptags }}</p>
+      {% endif %}
+    </div>
+
       {% if form.content.errors %}
         <p class="text-warning text-sm mt-1">{{ form.content.errors|striptags }}</p>
       {% endif %}
@@ -91,60 +99,77 @@
   </form>
 </div>
 
+<!-- Scripts -->
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script>
+  ClassicEditor
+    .create(document.querySelector('#editor'), {
+      toolbar: {
+        items: [
+          'heading', '|',
+          'bold', 'italic', 'underline', 'strikethrough', 'highlight', '|',
+          'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor', '|',
+          'alignment', '|',
+          'numberedList', 'bulletedList', '|',
+          'link', 'blockQuote', 'insertTable', 'horizontalLine', '|',
+          'undo', 'redo'
+        ]
+      },
+      language: 'es',
+      placeholder: 'Escribe el contenido del blog aquí...',
+    })
+    .then(editor => {
+      window.editor = editor;
+    })
+    .catch(error => {
+      console.error('Error inicializando CKEditor:', error);
+    });
+
   // Mostrar nombre del archivo seleccionado
   document.getElementById('id_image').addEventListener('change', function(e) {
     const fileName = e.target.files[0] ? e.target.files[0].name : 'Ningún archivo seleccionado';
     document.getElementById('file-name').textContent = fileName;
   });
-</script>
 
-<script>
-const selectedTags = new Set();
-const selectedTagsContainer = document.getElementById('selected-tags');
-const tagsInput = document.getElementById('tags-input');
+  // Script para etiquetas
+  const selectedTags = new Set();
+  const selectedTagsContainer = document.getElementById('selected-tags');
+  const tagsInput = document.getElementById('tags-input');
 
-document.querySelectorAll('.tag-option').forEach(el => {
+  document.querySelectorAll('.tag-option').forEach(el => {
     el.addEventListener('click', function (e) {
-        e.preventDefault();
-        const tagId = this.dataset.id;
-        const tagName = this.textContent;
+      e.preventDefault();
+      const tagId = this.dataset.id;
+      const tagName = this.textContent;
+      if (selectedTags.has(tagId)) return;
+      selectedTags.add(tagId);
+      updateSelectedTags();
 
-        if (selectedTags.has(tagId)) return;
+      const pill = document.createElement('span');
+      pill.className = 'bg-neon text-black text-sm px-3 py-1 rounded-full font-medium';
+      pill.textContent = tagName;
 
-        selectedTags.add(tagId);
+      pill.addEventListener('click', () => {
+        selectedTags.delete(tagId);
+        pill.remove();
         updateSelectedTags();
+      });
 
-        // Crear pill visual
-        const pill = document.createElement('span');
-        pill.className = 'bg-neon text-black text-sm px-3 py-1 rounded-full font-medium';
-        pill.textContent = tagName;
-
-        // Eliminar etiqueta si se hace click sobre la pill
-        pill.addEventListener('click', () => {
-            selectedTags.delete(tagId);
-            pill.remove();
-            updateSelectedTags();
-        });
-
-        selectedTagsContainer.appendChild(pill);
+      selectedTagsContainer.appendChild(pill);
     });
-});
+  });
 
-function updateSelectedTags() {
+  function updateSelectedTags() {
     tagsInput.value = Array.from(selectedTags).join(',');
-}
-</script>
+  }
 
-<script>
   const dropdownBtn = document.getElementById('dropdownTagsButton');
   const dropdownMenu = document.getElementById('dropdownTags');
 
-  dropdownBtn.addEventListener('click', function () {
+  dropdownBtn.addEventListener('click', () => {
     dropdownMenu.classList.toggle('hidden');
   });
 
-  // Ocultar dropdown si se hace clic fuera
   document.addEventListener('click', function (e) {
     if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
       dropdownMenu.classList.add('hidden');
@@ -152,19 +177,81 @@ function updateSelectedTags() {
   });
 </script>
 
-
 <style>
-  .glow-effect {
-    box-shadow: 0 0 15px rgba(0, 255, 231, 0.3);
-  }
-  .ckeditor-wrapper {
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
   .ck.ck-editor__editable_inline {
-    background: #1F2937 !important;
-    color: white !important;
-    border: 2px solid #374151 !important;
+    min-height: 300px;
+    background-color: transparent !important;
+  }
+
+  .dark .ck.ck-editor__editable_inline {
+    background-color: #1f2937 !important;
+  }
+
+  .ck-content {
+  background-color: transparent;
+  color: #e5e7eb; /* gris claro para modo oscuro */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  line-height: 1.75;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif; /* o el que uses en tu sitio */
+}
+
+/* Estilo gamer/neón para encabezados */
+.ck-content h1,
+.ck-content h2,
+.ck-content h3 {
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  color: #7fdbff; /* azul neón */
+  text-shadow: 0 0 5px #7fdbff;
+}
+
+  .ck-content h1 {
+    font-size: 1.875rem;
+  }
+  .ck-content h2 {
+    font-size: 1.5rem;
+  }
+  .ck-content h3 {
+    font-size: 1.25rem;
+  }
+
+  /* Estilo para texto en negrita y cursiva */
+  .ck-content strong {
+    font-weight: bold;
+    color: #00ff99;
+    text-shadow: 0 0 4px #00ff99;
+  }
+
+  .ck-content em {
+    font-style: italic;
+    color: #ff66cc;
+    text-shadow: 0 0 4px #ff66cc;
+  }
+
+  /* Listas numeradas y con viñetas */
+  .ck-content ul,
+  .ck-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .ck-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Viñetas personalizadas para el estilo gamer */
+  .ck-content ul li::marker {
+    color: #f472b6; /* rosa neón */
+  }
+
+  /* Números de listas con estilo neón */
+  .ck-content ol li::marker {
+    color: #38bdf8; /* azul claro */
+    font-weight: bold;
   }
 </style>
+
 {% endblock %}

@@ -138,7 +138,19 @@ CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
-        'height': 300,
-        'width': '100%',
-    },
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['Link', 'Unlink'],
+            ['BulletedList', 'NumberedList'],
+            ['Blockquote', 'CodeSnippet'],
+            ['RemoveFormat', 'Source'],
+            ['Image', 'Table'],
+            ['Maximize']
+        ],
+        'removePlugins': 'font,colorbutton',
+        'format_tags': 'p;h1;h2;h3;pre',
+        'contentsCss': '',  # Opcional: puedes usar tu CSS si deseas heredar estilos globales
+        'extraAllowedContent': '*(*);*{*}',  # Permitir contenido sin restricciones de estilo
+        'removeDialogTabs': 'image:advanced;link:advanced',
+    }
 }
