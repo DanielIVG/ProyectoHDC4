@@ -157,6 +157,17 @@ class Comment(models.Model):
         "Fecha de creación",
         auto_now_add=True
     )
+    
+    # Campo de likes
+    likes = models.ManyToManyField(
+        User,
+        related_name='liked_comments',
+        blank=True,
+        verbose_name="Usuarios que dieron me gusta"
+    )
+
+    def total_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return f"Comentario de {self.commenter.username}"
