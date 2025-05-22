@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-  <article class="bg-#7d6dd8 dark:bg-gray-900 p-6 rounded-lg shadow-lg transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
+  <article class="bg-violet-300 dark:bg-gray-900 p-6 rounded-lg shadow-lg transition-all duration-700 ease-in-out light-mode-link animate-fade-in">
     <h1 class="text-3xl font-bold mb-4">{{ object.title }}</h1>
 
     {% if object.image %}
@@ -19,19 +19,19 @@
       {{ object.content|safe }}
     </div>
 
-    <p class="text-sm text-black dark:text-white">By {{ object.author.username }} - {{ object.created_at }}</p>
+    <p class="text-sm light-mode-link">De {{ object.author.username }} - {{ object.created_at }}</p>
   </article>
 
   <section class="mt-12">
-    <h2 class="text-2xl font-semibold mb-4">Reviews</h2>
+    <h2 class="text-2xl font-semibold mb-4 light-mode-link">Reviews</h2>
     {% for review in object.reviews.all %}
-      <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-4 transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
-        <p class="text-black dark:text-white font-medium">{{ review.reviewer.username }} - {{ review.rating }}/5 ⭐</p>
-        <p class="text-gray-700 dark:text-white">{{ review.comment }}</p>
-        <a href="{% url 'blogapp:add_comment' blog_pk=object.pk review_pk=review.pk %}" class="text-sm text-black dark:text-white hover:text-blue-500 dark:hover:text-blue-300 mt-2 inline-block">Add Comment</a>
-        <ul class="mt-2 list-disc ml-6 text-gray-600 dark:text-gray-400">
+      <div class="bg-violet-300 dark:bg-gray-800 p-4 rounded-lg mb-4 transition-all duration-700 ease-in-out dark:text-white text-gray-900 animate-fade-in">
+        <p class="light-mode-link font-medium">{{ review.reviewer.username }} - {{ review.rating }}/5 ⭐</p>
+        <p class="light-mode-link">{{ review.comment }}</p>
+        <a href="{% url 'blogapp:add_comment' blog_pk=object.pk review_pk=review.pk %}" class="text-sm text-fuchsia-600 dark:text-sky-400 hover:text-blue-500 dark:hover:text-blue-300 mt-2 inline-block">Añade un comentario</a>
+        <ul class="mt-2 list-disc ml-6 light-mode-link">
           {% for comment in review.comments.all %}
-            <li><span class="font-semibold text-gray-900 dark:text-white">{{ comment.commenter.username }}</span>: {{ comment.content }}</li>
+            <li><span class="font-semibold light-mode-link">{{ comment.commenter.username }}</span>: {{ comment.content }}</li>
           {% endfor %}
         </ul>
       </div>

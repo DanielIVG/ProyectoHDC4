@@ -76,7 +76,7 @@ class BlogCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save()
 
         messages.success(self.request, '¡Blog creado exitosamente!')
-        return super().form_valid(form)  # ahora que self.object existe
+        return super().form_valid(form)  
 
     def get_success_url(self):
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.object.pk})
@@ -101,7 +101,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
             messages.error(self.request, 'Ya has enviado una reseña para este blog.')
             return redirect('blogapp:blog_detail', pk=blog.pk)
 
-        # Si no hay reseña previa, asignamos al revisor (usuario actual)
         form.instance.reviewer = self.request.user
         form.instance.blog = blog
 
@@ -109,7 +108,6 @@ class ReviewCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        # Redirigimos al detalle del blog después de una reseña exitosa
         return reverse_lazy('blogapp:blog_detail', kwargs={'pk': self.kwargs['pk']})
 
 

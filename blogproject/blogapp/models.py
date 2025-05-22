@@ -34,10 +34,10 @@ class Tag(models.Model):
 
 # Validación personalizada para imágenes
 def validate_image_size(value):
-    """Limita el tamaño de imágenes a 2MB."""
-    limit = 2 * 1024 * 1024
+    """Limita el tamaño de imágenes a 5MB."""
+    limit = 5 * 1920 * 1920
     if value.size > limit:
-        raise ValidationError('La imagen no puede superar 2MB de tamaño.')
+        raise ValidationError('La imagen no puede superar 5MB de tamaño.')
 
 
 class Blog(models.Model):

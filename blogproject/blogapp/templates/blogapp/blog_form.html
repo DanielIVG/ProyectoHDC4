@@ -3,8 +3,8 @@
 {% load static %}
 
 {% block content %}
-<div class="bg-gray-200 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-neon rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
-  <h1 class="text-3xl font-bold mb-6 text-black dark:text-neon text-center tracking-wider">NUEVO BLOG</h1>
+<div class="bg-violet-300 dark:bg-gray-900/80 backdrop-blur-sm border-2 dark:border-neon border-purple-500 rounded-xl p-8 max-w-4xl mx-auto shadow-xl glow-effect animate-fade-in">
+  <h1 class="text-3xl font-bold mb-6 light-mode-link text-center tracking-wider">NUEVO BLOG</h1>
 
   {% if form.errors %}
   <div class="text-red-400 bg-red-900 p-4 rounded mb-4">
@@ -18,8 +18,8 @@
 
     <!-- Campo Título -->
     <div class="space-y-2">
-      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">TÍTULO</label>
-      {{ form.title|add_class:"bg-gray-800 text-white border-2 border-gray-700 rounded-lg px-4 py-3 w-full focus:border-neon focus:ring-2 focus:ring-neon/50 font-gamer tracking-wide" }}
+      <label class="block light-mode-link text-sm font-gamer tracking-wide ">TÍTULO</label>
+      {{ form.title|add_class:"dark:bg-gray-800 bg-violet-200 dark:text-white text-black border-2 border-gray-700 rounded-lg px-4 py-3 w-full dark:focus:border-neon focus:border-purple-500 focus:ring-2 dark:focus:ring-neon/50 focus:ring-purple-500 font-gamer tracking-wide transition-colors duration-300" }}
       {% if form.title.errors %}
         <p class="text-warning text-sm mt-1">{{ form.title.errors|striptags }}</p>
       {% endif %}
@@ -27,11 +27,11 @@
 
     <!-- Campo Imagen -->
     <div class="space-y-2">
-      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">IMAGEN DESTACADA</label>
+      <label class="block light-mode-link text-sm font-gamer tracking-wide">IMAGEN DESTACADA</label>
       <div class="relative">
         {{ form.image|add_class:"absolute inset-0 w-full h-full opacity-0 cursor-pointer" }}
-        <div class="bg-gray-800 border-2 border-gray-700 rounded-lg p-4 text-center hover:border-neon transition-colors duration-300">
-          <span class="text-neon font-gamer">SELECCIONAR ARCHIVO</span>
+        <div class="dark:bg-gray-800 bg-violet-200 light-mode-link border-2 border-gray-700 rounded-lg p-4 text-center hover:border-neon transition-colors duration-300">
+          <span class="dark:text-neon text-purplee font-gamer">SELECCIONAR ARCHIVO</span>
           <span id="file-name" class="text-white text-sm block mt-1">Ningún archivo seleccionado</span>
         </div>
       </div>
@@ -42,7 +42,7 @@
 
     <!-- Campo Tags -->
     <div class="space-y-2 relative z-20">
-      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">ETIQUETAS</label>
+      <label class="block light-mode-link dark:text white text-sm font-gamer tracking-wide">ETIQUETAS</label>
       <button id="dropdownTagsButton"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         type="button">
@@ -52,8 +52,8 @@
         </svg>
       </button>
 
-      <div id="dropdownTags" class="hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-56 dark:bg-gray-700 absolute top-full mt-2 left-0 z-30">
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownTagsButton">
+      <div id="dropdownTags" class="hidden bg-violet-200 divide-y divide-gray-100 rounded-lg shadow w-56 dark:bg-gray-700 absolute top-full mt-2 left-0 z-30">
+        <ul class="py-2 text-sm text-white dark:text-gray-200 light-mode-link" aria-labelledby="dropdownTagsButton">
           {% for tag in form.fields.tags.queryset %}
             <li>
               <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white tag-option" data-id="{{ tag.id }}" data-name="{{ tag.name }}">{{ tag.name }}</a>
@@ -68,7 +68,7 @@
 
     <!-- Campo Contenido -->
     <div class="space-y-2">
-      <label class="block text-black dark:text-neon text-sm font-gamer tracking-wide">CONTENIDO</label>
+      <label class="block light-mode-link dark:text white text-sm font-gamer tracking-wide">CONTENIDO</label>
       
       <div class="w-full border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 shadow-md">
         <div class="px-3 py-2 border-b border-gray-200 dark:border-gray-600">
@@ -91,10 +91,29 @@
 
     <!-- Botón Submit -->
     <div class="pt-6">
-      <button type="submit" class="w-full bg-neon hover:bg-neon/90 text-black font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-95 tracking-wider border-2 border-black shadow-lg">
+      <button
+        type="submit"
+        class="w-full 
+              bg-violet-400
+              light-mode-link
+              border-2 border-white 
+              hover:bg-violet-700
+
+              dark:bg-neon 
+              dark:text-black 
+              dark:border-black 
+              dark:hover:bg-neon/90 
+
+              font-bold py-3 px-6 
+              rounded-lg 
+              transition-all duration-300 
+              transform hover:scale-[1.02] active:scale-95 
+              tracking-wider 
+              shadow-lg">
         PUBLICAR BLOG
       </button>
     </div>
+
   </form>
 </div>
 
@@ -193,7 +212,7 @@
   border-radius: 0.5rem;
   line-height: 1.75;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif; /* o el que uses en tu sitio */
+  font-family: 'Inter', sans-serif;
 }
 
 /* Estilo gamer/neón para encabezados */

@@ -90,23 +90,32 @@
     }
 
     body:not(.dark) .light-mode-link {
-      color: #0f172a;
-      text-shadow: 0 0 2px #4de0d4, 0 0 5px #4de0d4;
+      color: white;
+      text-shadow: 0 0 2px #6600ff, 0 0 5px #5d00ff;
     }
 
     body:not(.dark) .light-mode-toggle {
       background-color: rgba(255, 255, 255, 0.2);
-      color: #0f172a;
-      text-shadow: 0 0 2px #4de0d4, 0 0 5px #4de0d4;
+      color: white;
+      text-shadow: 0 0 2px #6600ff, 0 0 5px #5d00ff;
     }
-
+    
     @keyframes neonBackground {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
     }
+
     .neon-glow {
       text-shadow: 0 0 2px #4de0d4, 0 0 5px #4de0d4;
+    }
+    
+    .neon-purple {
+      text-shadow: 0 0 2px #6600ff, 0 0 5px #5d00ff;
+    }
+
+    .purple{
+      color: #6600ff ;
     }
   </style>
 </head>
@@ -119,13 +128,13 @@
   light-mode-nav">
   <div class="max-w-7xl mx-auto flex items-center px-1 w-full">
     <a href="{% url 'blogapp:blog_list' %}" 
-       class="flex items-center gap-2 text-3xl font-extrabold tracking-widest hover:text-neon transition-all duration-300 light-mode-link">
+       class="flex items-center gap-2 text-3xl font-extrabold tracking-widest transition-all duration-300 light-mode-link">
       <img src="{% static 'images/favicon.ico' %}" alt="Logo" class="h-12 w-12">
       GameVerse
     </a>
     
     <div class="flex ml-auto items-center space-x-4">
-      <button onclick="toggleDarkMode()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light/20 dark:bg-primary-dark/50 text-white hover:bg-primary-light/30 transition-all duration-300 shadow-md light-mode-toggle">
+      <button onclick="toggleDarkMode()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-primary-light/20 dark:bg-primary-dark/50 text-white hover:bg-primary-light/30 transition-all duration-300 shadow-md">
         <span id="theme-icon" class="transition-transform duration-500 transform">🌞</span>
         <span id="theme-label" class="transition-opacity duration-500 ease-in-out">Modo Claro</span>
       </button>
@@ -135,7 +144,7 @@
           <a href="{% url 'blogapp:login' %}" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium">Login</a>
           <a href="{% url 'blogapp:register' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium">Register</a>
         {% else %}
-          <a href="{% url 'blogapp:add_blog' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium">Nuevo Blog</a>
+          <a href="{% url 'blogapp:add_blog' %}" class="bg-neon text-black px-4 py-2 rounded-lg hover:bg-primary-light hover:text-white transition-all duration-300 font-medium light-mode-toggle">Nuevo Blog</a>
           <button data-drawer-target="profile-sidebar" data-drawer-show="profile-sidebar" aria-controls="profile-sidebar" class="p-2 text-white hover:text-neon transition light-mode-link">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>

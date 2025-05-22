@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block content %}
-<div class="flex items-center justify-center min-h-screen bg-white dark:bg-gray-900 transition-all duration-700 ease-in-out">
-  <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md animate-fade-in">
-    <h2 class="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">Registrarse</h2>
+<div class="flex items-center justify-center min-h-screen rounded-2xl bg-violet-300 dark:bg-gray-900 transition-all duration-700 ease-in-out">
+  <div class="bg-violet-200 dark:bg-gray-800 p-8 rounded-2xl shadow-xl w-full max-w-md animate-fade-in">
+    <h2 class="text-3xl font-bold text-center light-mode-link">Registrarse</h2>
 
     {% if form.errors %}
       <div class="bg-red-100 dark:bg-red-200 text-red-800 px-4 py-3 rounded-md mb-4 text-sm font-medium shadow-sm">
@@ -17,9 +17,9 @@
       {{ form.non_field_errors }}
 
       <div>
-        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usuario</label>
+        <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium light-mode-link mb-1">Usuario</label>
         <input type="text" name="username" id="{{ form.username.id_for_label }}" required
-          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black shadow-sm"
           value="{{ form.username.value|default_if_none:'' }}">
         {% if form.username.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.username.errors|striptags }}</p>
@@ -27,9 +27,9 @@
       </div>
 
       <div>
-        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Correo electrónico</label>
+        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium light-mode-link mb-1">Correo electrónico</label>
         <input type="email" name="email" id="{{ form.email.id_for_label }}"
-          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black shadow-sm"
           value="{{ form.email.value|default_if_none:'' }}">
         {% if form.email.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.email.errors|striptags }}</p>
@@ -37,25 +37,25 @@
       </div>
 
       <div>
-        <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Contraseña</label>
+        <label for="{{ form.password1.id_for_label }}" class="block text-sm font-medium light-mode-link mb-1">Contraseña</label>
         <input type="password" name="password1" id="{{ form.password1.id_for_label }}" required
-          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black shadow-sm">
         {% if form.password1.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.password1.errors|striptags }}</p>
         {% endif %}
       </div>
 
       <div>
-        <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirmar Contraseña</label>
+        <label for="{{ form.password2.id_for_label }}" class="block text-sm font-medium light-mode-link mb-1">Confirmar Contraseña</label>
         <input type="password" name="password2" id="{{ form.password2.id_for_label }}" required
-          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+          class="w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-black shadow-sm">
         {% if form.password2.errors %}
           <p class="text-red-500 text-sm mt-1">{{ form.password2.errors|striptags }}</p>
         {% endif %}
       </div>
 
-      <div class="text-sm text-center text-gray-600 dark:text-gray-400">
-        ¿Ya tienes una cuenta?
+      <div class="text-sm text-center">
+        <span class=" light-mode-link mr-2">¿Ya tienes una cuenta?  </span>
         <a href="{% url 'blogapp:login' %}" class="text-blue-500 hover:underline">Inicia sesión aquí</a>
       </div>
 

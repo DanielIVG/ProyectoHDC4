@@ -1,7 +1,7 @@
 {% extends "blogapp/base.html" %}
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-  <h2 class="text-2xl font-bold mb-6 dark:text-white text-gray-800">Mis Blogs</h2>
+<div class="container mx-auto px-4 py-8 transition-all duration-700 ease-in-out animate-fade-in">
+  <h2 class="text-2xl font-bold mb-6 light-mode-link">Mis Blogs</h2>
 
   <!-- Botón para ver blogs populares -->
   <div class="mb-6">
@@ -12,18 +12,18 @@
 
   <div class="space-y-6">
     {% for blog in blogs %}
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out dark:text-white text-gray-900">
+      <div class="bg-violet-200 dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-all duration-700 ease-in-out light-mode-link">
         <h3 class="text-xl font-semibold mb-2">
-          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-blue-400 hover:text-blue-300">
+          <a href="{% url 'blogapp:blog_detail' blog.pk %}" class="text-fuchsia-400 dark:text-teal-300 dark:hover:text-white hover:text-white">
             {{ blog.title }}
           </a>
         </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
+        <p class="text-sm light-mode-link">
           {{ blog.created_at|date:"M d, Y" }} – Etiqueta: {{ blog.tag }}
         </p>
       </div>
     {% empty %}
-      <p class="text-gray-500 dark:text-gray-300">Aún no has creado ningún blog.</p>
+      <p class="light-mode-link">Aún no has creado ningún blog.</p>
     {% endfor %}
   </div>
 </div>
