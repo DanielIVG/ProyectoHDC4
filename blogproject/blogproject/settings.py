@@ -122,7 +122,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'blogapp' /'static',
+    BASE_DIR / 'blogapp' / 'static',
 ]
 
 # Default primary key field type
