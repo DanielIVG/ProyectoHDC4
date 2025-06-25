@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView, register_view, login_view, logout_view, DashboardView, ProfileUpdateView
+from .webapps.views import BlogListView, BlogDetailView, ReviewCreateView, CommentCreateView, BlogCreateView, register_view, login_view, logout_view, DashboardView, ProfileUpdateView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
-from .views import PopularBlogsView
+from .webapps.views import PopularBlogsView
 
 app_name = 'blogapp'
 
